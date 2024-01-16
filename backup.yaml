@@ -1,0 +1,13 @@
+composer:
+        image: "composer"
+        volumes:
+            - "./web/app:/app"
+        command: install
+
+    node:
+        image: node:latest
+        ports:
+            - "3000:3000"
+        volumes:
+            - "./web/app:/app"
+        command: "npm install && npm run build && npm run start"

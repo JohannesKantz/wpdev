@@ -1,0 +1,83 @@
+version: "3"
+services:
+    web:
+        image: nginx:alpine
+        volumes:
+            # - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
+            - "./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+            - "./web:/var/www/html"
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        ports:
+            - "8000:80"
+            - "5000:443"
+        environment:
+            - NGINX_HOST=${NGINX_HOST}
+        restart: always
+        depends_on:
+            - php
+            - mysqldb
+        networks:
+            - net1
+
+    certbot:
+        image: certbot/certbot:latest
+        volumes:
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        command: certonly --webroot --webroot-path=/var/www/certbot --agree-tos --staging -d ${NGINX_HOST}
+
+    php:
+        image: nanoninja/php-fpm:${PHP_VERSION}
+        restart: always
+        volumes:
+            - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+            - "./web:/var/www/html"
+        networks:
+            - net1
+
+    mysqldb:
+        image: mysql:${MYSQL_VERSION}
+        container_name: ${MYSQL_HOST}
+        restart: always
+        env_file:
+            - ".env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - "8989:3306"
+        volumes:
+            - "./data/db/mysql:/var/lib/mysql"
+        networks:
+            - net1
+    myadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        ports:
+            - "8080:80"
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=${MYSQL_HOST}
+        restart: always
+        depends_on:
+            - mysqldb
+        networks:
+            - net1
+
+    node:
+        build:
+            context: .
+            dockerfile: node.Dockerfile
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./web:/web
+        networks:
+            - net1
+
+networks:
+    net1:
+        driver: bridge

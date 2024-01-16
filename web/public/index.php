@@ -1,0 +1,1 @@
+<p>Test public/index.php</p>

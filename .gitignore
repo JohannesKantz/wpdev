@@ -1,0 +1,40 @@
+
+
+/web/app/node_modules
+/web/app/.pnp
+/web/app.pnp.js
+/web/app.yarn/install-state.gz
+
+# testing
+/web/app/coverage
+
+# next.js
+/web/app/.next/
+/web/app/out/
+
+# production
+/web/app/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+/web/appnpm-debug.log*
+/web/appyarn-debug.log*
+/web/appyarn-error.log*
+
+# vercel
+/web/app.vercel
+
+# typescript
+/web/app*.tsbuildinfo
+/web/appnext-env.d.ts
+
+/web/app/web/subdomain/**
+/web/app/web/wordpressVersions/**
+
+**/*.env
+**/*.env.local
+
+data/db/mysql
