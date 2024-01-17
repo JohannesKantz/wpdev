@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const protocol = "http";
-const host = "localhost:8000";
+const host = process.env.HOSTNAME || "localhost";
 
 export function getUrl(subdomain?: string) {
     if (subdomain) {
