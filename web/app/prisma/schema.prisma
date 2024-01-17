@@ -61,6 +61,12 @@ model VerificationRequest {
 }
 
 model Server {
-  id   Int    @id @default(autoincrement())
-  name String
+  id                Int      @id @default(autoincrement())
+  name              String   @unique
+  databaseName      String
+  wordPressUsername String
+  wordPressPassword String
+  createdAt         DateTime @default(now())
+  notes             String?
+  wordpressVersion  String?
 }
