@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-const protocol = "http";
+const protocol = "https";
 const host = process.env.HOSTNAME || "localhost";
 
 export function getUrl(subdomain?: string) {
