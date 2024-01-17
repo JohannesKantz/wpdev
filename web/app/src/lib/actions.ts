@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import mysql, { ConnectionOptions } from "mysql2";
 import decompress from "decompress";
 import prisma from "./prisma";
+import crypto from "crypto";
 
 const MYSQLConnectionConfig: ConnectionOptions = {
     host: process.env.MYSQL_HOST!,
@@ -222,13 +223,22 @@ async function setupWordPressProject(projectName: string, projectPath: string) {
     wpConfig = wpConfig.replace("localhost", "mysql");
 
     // add salts
-    const res = await axios.get(
-        "https://api.wordpress.org/secret-key/1.1/salt/"
-    );
-    let salts = res.data;
+    const generateSalt = (length: number) => {
+        return crypto.randomBytes(length).toString("hex");
+    };
 
+    const salts = `
+define('AUTH_KEY',         '${generateSalt(64)}');
+define('SECURE_AUTH_KEY',  '${generateSalt(64)}');
+define('LOGGED_IN_KEY',    '${generateSalt(64)}');
+define('NONCE_KEY',        '${generateSalt(64)}');
+define('AUTH_SALT',        '${generateSalt(64)}');
+define('SECURE_AUTH_SALT', '${generateSalt(64)}');
+define('LOGGED_IN_SALT',   '${generateSalt(64)}');
+define('NONCE_SALT',       '${generateSalt(64)}');
+`;
     wpConfig = wpConfig.replace(
-        /(define[(][ ]*[^,]*,[ ]*'put your unique phrase here'[ ]*[)];[\r\n]*){8}/,
+        /(define\s*\(\s*'[^']*'\s*,\s*'put your unique phrase here'\s*\);[\r\n\s]*){8}/g,
         salts
     );
 
