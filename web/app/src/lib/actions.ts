@@ -59,6 +59,15 @@ export async function createNewProject(
             projectName: projectName,
         };
     }
+    // check if the project name is a valid subdomain
+    const subdomainRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    if (!subdomainRegex.test(projectName)) {
+        return {
+            status: "error",
+            message: "Project name is invalid",
+            projectName: projectName,
+        };
+    }
 
     console.log("Creating new project", projectName, wordpressVersion);
 
