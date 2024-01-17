@@ -48,7 +48,7 @@ services:
             - MYSQL_USER=${MYSQL_USER}
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
         ports:
-            - "8989:3306"
+            - "3306:3306"
         volumes:
             - "./data/db/mysql:/var/lib/mysql"
         networks:
@@ -75,6 +75,13 @@ services:
             - "3000:3000"
         volumes:
             - ./web:/web
+        environment:
+            - MYSQL_HOST=${MYSQL_HOST}
+            - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_VERSION=${MYSQL_VERSION}
         networks:
             - net1
 
