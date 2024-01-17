@@ -34,6 +34,12 @@
 /web/app/prisma/*.db
 /web/app/web/subdomain/**
 /web/app/web/wordpressVersions/**
+/web/app/web/unzipWordPress/**
+
+/web/subdomain/**
+/web/wordpressVersions/**
+/web/unzipWordPress/**
+
 
 **/*.env
 **/*.env.local
