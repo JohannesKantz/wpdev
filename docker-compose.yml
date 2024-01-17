@@ -2,10 +2,11 @@ version: "3"
 services:
     web:
         image: nginx:alpine
+        user: root
         volumes:
             # - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
             - "./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf"
-            - "./web:/var/www/html"
+            - "web:/var/www/html"
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
         ports:
@@ -30,9 +31,10 @@ services:
     php:
         image: nanoninja/php-fpm:${PHP_VERSION}
         restart: always
+        user: root
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
-            - "./web:/var/www/html"
+            - "web:/var/www/html"
         networks:
             - net1
 
@@ -40,6 +42,7 @@ services:
         image: mysql:${MYSQL_VERSION}
         container_name: ${MYSQL_HOST}
         restart: always
+        user: root
         env_file:
             - ".env"
         environment:
@@ -74,7 +77,9 @@ services:
         ports:
             - "3000:3000"
         volumes:
-            - ./web:/web
+            - web:/web
+            - prismaDB:/prisma/db
+        user: root
         environment:
             - MYSQL_HOST=${MYSQL_HOST}
             - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
@@ -82,9 +87,16 @@ services:
             - MYSQL_USER=${MYSQL_USER}
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
             - MYSQL_VERSION=${MYSQL_VERSION}
+            - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+            - ADMIN_USER=${ADMIN_USER}
+            - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+            - DATABASE_URL=${DATABASE_URL}
         networks:
             - net1
 
 networks:
     net1:
         driver: bridge
+volumes:
+    web:
+    prismaDB:
