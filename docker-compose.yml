@@ -4,7 +4,6 @@ services:
         image: nginx:alpine
         user: root
         volumes:
-            # - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
             - "./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf"
             - "web:/var/www/html"
             - ./certbot/conf:/etc/letsencrypt
@@ -22,16 +21,6 @@ services:
         networks:
             - net1
 
-    certbot:
-        image: certbot/certbot:latest
-        user: root
-        volumes:
-            - ./certbot/conf:/etc/letsencrypt
-            - ./certbot/www:/var/www/certbot
-        command: certonly --webroot --webroot-path=/var/www/certbot --agree-tos --staging -d *.${NGINX_HOST} -m ${EMAIL} --no-eff-email
-        depends_on:
-            - web
-
     php:
         image: nanoninja/php-fpm:${PHP_VERSION}
         restart: always
@@ -39,6 +28,7 @@ services:
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
             - "web:/var/www/html"
+        command: chmod -R 777 /var/www/html
         networks:
             - net1
 
