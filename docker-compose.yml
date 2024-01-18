@@ -9,11 +9,12 @@ services:
             - "web:/var/www/html"
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
+            - ./etc/nginx/ssl:/etc/nginx/ssl
         ports:
-            - "8000:80"
-            - "5000:443"
+            - "80:80"
+            - "443:443"
         environment:
-            - NGINX_HOST=${NGINX_HOST}
+            - DOMAIN=${NGINX_HOST}
         restart: always
         depends_on:
             - php
@@ -23,10 +24,13 @@ services:
 
     certbot:
         image: certbot/certbot:latest
+        user: root
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
-        command: certonly --webroot --webroot-path=/var/www/certbot --agree-tos --staging -d ${NGINX_HOST}
+        command: certonly --webroot --webroot-path=/var/www/certbot --agree-tos --staging -d *.${NGINX_HOST} -m ${EMAIL} --no-eff-email
+        depends_on:
+            - web
 
     php:
         image: nanoninja/php-fpm:${PHP_VERSION}
