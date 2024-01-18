@@ -176,6 +176,7 @@ export default function CreateNewServer() {
                                 <a
                                     href={getUrl(response.projectName)}
                                     className="text-blue-500"
+                                    target="_blank"
                                 >
                                     {getUrl(response.projectName)}
                                 </a>
