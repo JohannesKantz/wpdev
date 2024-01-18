@@ -32,6 +32,7 @@
 /web/appnext-env.d.ts
 
 /web/app/prisma/*.db
+/web/app/prisma/db/**
 /web/app/web/subdomain/**
 /web/app/web/wordpressVersions/**
 /web/app/web/unzipWordPress/**
@@ -41,7 +42,13 @@
 /web/unzipWordPress/**
 
 
+
+
 **/*.env
 **/*.env.local
 
 data/db/mysql
+data/prismaDB/**
+
+
+certbot/**
