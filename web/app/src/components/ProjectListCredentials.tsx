@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import ShowHidePassword from "./ShowHidePassword";
+import { useToast } from "./ui/use-toast";
 
 export default function ProjectListCredentials({
     username,
@@ -33,10 +34,14 @@ export default function ProjectListCredentials({
 }
 
 function CopyButton({ text }: { text: string }) {
+    const { toast } = useToast();
     return (
         <button
             onClick={() => {
                 navigator.clipboard.writeText(text);
+                toast({
+                    title: "Copied",
+                });
             }}
             className="p-2 text-sm text-blue-200 rounded-md"
         >
