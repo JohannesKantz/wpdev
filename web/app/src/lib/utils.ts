@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const protocol = "https";
-const host = process.env.HOSTNAME || "localhost";
+const host = process.env.HOSTNAME || "wpdev.website";
 
 export function getUrl(subdomain?: string) {
     if (subdomain) {
