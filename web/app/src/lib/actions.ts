@@ -231,6 +231,8 @@ async function setupWordPressProject(projectName: string, projectPath: string) {
     );
     wpConfig = wpConfig.replace("localhost", "mysql");
 
+    wpConfig += "\n\ndefine('FS_METHOD', 'direct');";
+
     // add salts
     const generateSalt = (length: number) => {
         return crypto.randomBytes(length).toString("hex");
